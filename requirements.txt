@@ -1,1 +1,2 @@
 google-cloud-bigquery==3.17.1 
+load_dotenv==1.5.2
