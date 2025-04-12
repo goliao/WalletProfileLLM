@@ -70,10 +70,10 @@ def save_results_to_file(results, output_file):
 
 def get_transactions_from_bigquery(wallet_id):
     """
-    Get transactions from BigQuery and return as a list of dictionaries.
+    Get USDC token transfers for a given wallet address.
     
     Args:
-        project_id (str): The GCP project ID
+        wallet_id (str): The Ethereum wallet address to query
 
     Returns:
         list: List of dictionaries containing query results
@@ -93,7 +93,7 @@ def get_transactions_from_bigquery(wallet_id):
             token_address = LOWER('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48')  -- USDC
             AND (
                 from_address = '{wallet_id}' 
-                OR to_address = '{wallet_id}'  -- Replace with your wallet address
+                OR to_address = '{wallet_id}'
             )
             AND block_timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 100 DAY)
             ORDER BY 
@@ -108,15 +108,15 @@ def get_transactions_from_bigquery(wallet_id):
         transactions.append(dict(row.items()))
     
     # Print results in a readable format
-    print("\nRecent Transactions (Last 2 weeks):")
+    print("\nRecent USDC Transactions (Last 100 days):")
     print("-" * 80)
     for tx in transactions:
-        # Convert value from Wei to ETH
-        eth_value = float(tx['value']) / 1e18
+        # Convert value from base units to USDC (6 decimals)
+        usdc_value = float(tx['value']) / 1e6
         print(f"Transaction Hash: {tx['transaction_hash']}")
         print(f"From: {tx['from_address']}")
         print(f"To: {tx['to_address']}")
-        print(f"Value: {eth_value:.6f} ETH")
+        print(f"Value: {usdc_value:.2f} USDC")
         print(f"Timestamp: {tx['block_timestamp']}")
         print("-" * 80)
     
