@@ -2,6 +2,8 @@ from google.cloud import bigquery
 import json
 import os
 from dotenv import load_dotenv
+from decimal import Decimal
+from datetime import datetime
 
 load_dotenv()
 PROJECT_ID = os.getenv("PROJECT_ID")
@@ -29,6 +31,14 @@ def query_bigquery_to_json(query, project_id=None):
         for row in query_job:
             # Convert row to dictionary
             row_dict = dict(row.items())
+            
+            # Convert non-JSON-serializable values
+            for key, value in row_dict.items():
+                if isinstance(value, Decimal):
+                    row_dict[key] = float(value)
+                elif isinstance(value, datetime):
+                    row_dict[key] = value.isoformat()
+            
             results.append(row_dict)
         
         return results
