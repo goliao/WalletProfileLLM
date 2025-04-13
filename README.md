@@ -1,6 +1,8 @@
 # BlockSight: Intuitive Blockchain Intelligence for Financial Institutions
 
-<embed src="BlockSight-Intuitive-Blockchain-Intelligence-for-Financial-Institutions.pdf" type="application/pdf" width="100%" height="600px" />
+## Presentation
+
+📄 [View our BlockSight presentation](BlockSight-Intuitive-Blockchain-Intelligence-for-Financial-Institutions.pdf)
 
 ## Overview
 
