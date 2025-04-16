@@ -122,31 +122,3 @@ def get_transactions_from_bigquery(wallet_id):
     
     return transactions
 
-if __name__ == "__main__":
-    # Exact query from table explorer
-    query = """
-    SELECT
-      *
-    FROM
-      `bigquery-public-data.crypto_ethereum.transactions`
-    LIMIT 10
-    """
-    
-    # Use your project ID to run the query
-    project_id = os.getenv("PROJECT_ID")
-    
-    try:
-        print("Executing query...")
-        # Execute query and get results
-        # results = query_bigquery_to_json(query, project_id)
-        results = get_transactions_from_bigquery("0xeaaa61bbc68b61fde867269ddd148a3b8041ef5b")
-        # Print results to console
-        print("\nQuery results:")
-        print(json.dumps(results, indent=2))
-        
-        # Save results to file
-        save_results_to_file(results, "ethereum_transactions.json")
-        
-    except Exception as e:
-        print(f"\nAn error occurred: {str(e)}") 
-
