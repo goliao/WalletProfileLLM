@@ -36,7 +36,7 @@ and add the following definition to your mcp servers:
             "command": "uv",
             "args": [
                 "--directory",
-                "~/dev/WalletProfileLLM",
+                "~/WalletProfileLLM",
                 "run",
                 "mcp_server.py"
             ]
