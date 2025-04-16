@@ -10,12 +10,12 @@ PROJECT_ID = os.getenv("PROJECT_ID")
 mcp = FastMCP()
 
 @mcp.tool()
-async def get_latest_transactions(
+async def get_usdc_transactions(
     wallet_id: str, 
     days: Optional[int] = None, 
     limit: Optional[int] = None
 ) -> list:
-    """Get all the latest USDC transactions for a given wallet address
+    """Get all the latest USDC transactions for a given wallet address. Use default values for days and limit unless specified or needed.
     Args:
         wallet_id (str): The Ethereum wallet address to query
         days (int, optional): Number of days to look back. Defaults to None.
@@ -41,7 +41,7 @@ async def get_wallet_info(
     days: Optional[int] = None, 
     limit: Optional[int] = None
 ) -> dict:
-    """Get basic information about a wallet
+    """Get basic information about a wallet. Use default values for days and limit unless specified or needed.
     Args:
         wallet_id (str): The Ethereum wallet address to query
         days (int, optional): Number of days to look back. Defaults to None.
@@ -67,7 +67,7 @@ async def get_top_tokens(
     days: Optional[int] = None, 
     limit: Optional[int] = None
 ) -> list:
-    """Get top tokens by volume for a given wallet
+    """Get top tokens by volume for a given wallet. Use default values for days and limit unless specified or needed.
     Args:
         wallet_id (str): The Ethereum wallet address to query
         days (int, optional): Number of days to look back. Defaults to None.
@@ -93,7 +93,7 @@ async def get_eth_transfers(
     days: Optional[int] = None, 
     limit: Optional[int] = None
 ) -> list:
-    """Get ETH transfers for a given wallet
+    """Get ETH transfers for a given wallet. Use default values for days and limit unless specified or needed.
     Args:
         wallet_id (str): The Ethereum wallet address to query
         days (int, optional): Number of days to look back. Defaults to None.
@@ -109,7 +109,7 @@ async def get_eth_transfers(
             kwargs["days"] = days
         if limit is not None:
             kwargs["limit"] = limit
-        return await crypto_client.get_eth_transfers(wallet_id, **kwrgs)
+        return await crypto_client.get_eth_transfers(wallet_id, **kwargs)
     except BigQueryQueryTooLarge as e:
         return {"error": str(e), "suggestion": "Try reducing the time window or using a more specific query"}
 
@@ -119,7 +119,7 @@ async def get_sol_transfers(
     days: Optional[int] = None, 
     limit: Optional[int] = None
 ) -> list:
-    """Get SOL transfers for a given wallet
+    """Get SOL transfers for a given wallet. Use default values for days and limit unless specified or needed.
     Args:
         wallet_id (str): The Solana wallet address to query
         days (int, optional): Number of days to look back. Defaults to None.
