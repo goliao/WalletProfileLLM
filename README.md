@@ -25,6 +25,26 @@ The Web3 Wallet Profiler LLM Chatbot is a specialized tool crafted to assist com
 ## Introduction
 This specification details the architecture, functionality, and implementation of the Web3 Wallet Profiler LLM Chatbot, tailored for compliance use. By combining OpenAI’s natural language processing capabilities with ergut’s mcp-bigquery-server, the chatbot can dynamically understand the structure of blockchain data and answer complex questions about Ethereum wallet activities. The backend is built with Python and FastAPI, ensuring robust API handling, while the frontend provides an intuitive chat experience.
 
+## Setup with Claude Desktop
+go to the following location: ~/Library/Application Support/Claude/claude_desktop_config.json
+and add the following definition to your mcp servers: 
+```
+{
+    "mcpServers": {
+      ...
+        "tokens": {
+            "command": "uv",
+            "args": [
+                "--directory",
+                "~/dev/WalletProfileLLM",
+                "run",
+                "mcp_server.py"
+            ]
+        }
+    }
+}
+```
+
 ## Architecture
 
 ### Backend
