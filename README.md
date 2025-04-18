@@ -1,82 +1,58 @@
-# BlockSight: Intuitive Blockchain Intelligence for Financial Institutions
-
-## Presentation
-
-📄 [View our BlockSight presentation](BlockSight-Intuitive-Blockchain-Intelligence-for-Financial-Institutions.pdf)
+# Web3 Wallet Profiler MCP Server
 
 ## Overview
+This project provides a Python-based MCP (Model Context Protocol) server for analyzing and profiling Ethereum wallet transactions. It enables natural language queries about wallet activity by leveraging Google BigQuery, designed to help users understand wallet behaviors and transaction patterns.
 
-BlockSight is an advanced blockchain analytics platform designed specifically for financial institutions. It enables compliance teams to analyze web3 wallet transactions through natural language queries, making blockchain intelligence accessible without requiring deep technical expertise.
+## Features
+- Analyze Ethereum wallet transactions using natural language queries
+- Retrieve transaction history, token distributions, and behavioral patterns
+- Integrates with Claude Desktop/Code for interactive analysis
+- Uses Google BigQuery as the blockchain data backend
 
-## Key Features
+## Project Structure
+- `mcp_server.py`: Main entry point for the MCP server
+- `bigquery_client.py`: Handles BigQuery queries and data access
+- `crypto_client.py`, `crypto_queries.py`, `query_bigquery.py`: Utility modules for blockchain data processing
+- `.env`, `.env.example`: Environment variable configuration
+- `requirements.txt`, `uv.lock`, `pyproject.toml`: Dependency management files
+- `LICENSE`, `README.md`: Project documentation and license
 
-- **Natural Language Queries**: Ask questions about wallet activities in plain English
-- **Transaction Analysis**: Track transaction frequency, amounts, and patterns
-- **Compliance Monitoring**: Identify transactions that may require Suspicious Activity Reports (SARs)
-- **User-Friendly Interface**: Intuitive chat-based interface requiring minimal technical knowledge
-- **Real-Time Insights**: Get immediate answers to your blockchain queries
+## Requirements
+- Python 3.11 or higher (see `.python-version`)
+- [uv](https://github.com/astral-sh/uv) for dependency management
+- Google Cloud account with BigQuery access
+- Claude Desktop or Claude Code
+- The following Python dependencies (see `requirements.txt`):
+  - google-cloud-bigquery
+  - python-dotenv
 
-## How It Works
+## Setup
+1. Clone the repository and navigate to the project directory
+2. Install dependencies using `uv` (reads from `.python-version` and `uv.lock`)
+3. Authenticate with Google Cloud using Application Default Credentials for BigQuery access
+4. Configure environment variables in a `.env.local` file (see `.env.example` for required keys)
+5. Start the MCP server as configured in Claude Desktop/Code
 
-BlockSight leverages cutting-edge AI technology to make blockchain data accessible and actionable:
+## Integration
+- Add the MCP server as a custom server in Claude Desktop/Code configuration
+- Start the server using the provided Python environment and entrypoint
+- Restart Claude Desktop/Code to detect the MCP server
 
-1. **Submit a Query**: Enter a wallet address and ask a question in natural language
-2. **AI Processing**: Our AI engine interprets your question and transforms it into a precise database query
-3. **Data Retrieval**: The system extracts relevant information from blockchains
-4. **Answer Generation**: Receive clear, concise answers that address your specific question
+## Usage
+- Submit Ethereum wallet addresses and natural language questions via Claude Desktop/Code
+- The server processes queries, retrieves data from BigQuery, and returns a structured answer
 
-## Use Cases
+## Troubleshooting
+- Ensure Google Cloud authentication is successful and the correct project is set
+- Check that the MCP server is running and reachable from Claude Desktop/Code
+- Adjust the MCP server port in your environment variables if port conflicts occur
+- Validate wallet addresses before submitting queries
 
-BlockSight is ideal for financial institutions that need to:
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-- **Monitor Customer Wallets**: Keep track of customer blockchain activities
-- **Investigate Suspicious Activities**: Quickly identify unusual transaction patterns
-- **Generate Compliance Reports**: Gather data for regulatory requirements
-- **Perform Due Diligence**: Assess wallet histories before onboarding new clients
-- **Detect Risk Patterns**: Identify potentially fraudulent or high-risk behavior
-
-## Technology Stack
-
-BlockSight is built using cutting-edge technologies:
-
-- **Data Source**: Ethereum ETL; Google BigQuery database
-- **AI Engine**: OpenAI's GPT-4 for natural language processing
-- **Backend**: Python 
-- **Frontend**: React-based intuitive chat interface (to be built)
-
-## Benefits
-
-- **Time Efficiency**: Reduce analysis time from hours to seconds
-- **Accessibility**: No SQL or blockchain expertise required
-- **Accuracy**: Precise answers based on actual on-chain data
-- **Compliance Focus**: Built specifically for financial regulation requirements
-- **Seamless Integration**: Works alongside your existing compliance tools
-
-## Example Queries
-
-- "How many transactions did this wallet make in the last month?"
-- "What's the total value of outgoing transactions from this wallet?"
-- "Has this wallet interacted with any flagged addresses?"
-- "Show me all transactions over 10 ETH from this wallet"
-- "What's the average transaction value for this wallet?"
-
-## Security and Compliance
-
-BlockSight is built with security and compliance at its core:
-
-- **Data Privacy**: Processes data securely without storing sensitive information
-- **Audit Trail**: Maintains logs of all queries for compliance purposes
-- **Read-Only Access**: Uses read-only access to blockchain data
-- **Resource Limits**: Implements query limits to prevent excessive usage
-- **Regulatory Alignment**: Designed to support GDPR, CCPA, and financial regulations
-
-## Getting Started
-
-1. Clone this repository
-2. Configure your environment variables
-3. Install dependencies
-4. Run the application
-5. Access the web interface
-
-
-*BlockSight - Making blockchain compliance intuitive and accessible for financial institutions.*
+## Notes
+- Only the Python-based MCP server and supporting modules are maintained in this repository
+- No frontend or FastAPI components are implemented
+- No unused or legacy components are required for operation
+- For Google BigQuery setup, refer to official documentation
