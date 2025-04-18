@@ -72,39 +72,61 @@ class CryptoQueries:
     
     # Query for getting top tokens by volume
     TOP_TOKENS = """
-        WITH token_metadata AS (
-            SELECT 
-                address,
-                name,
-                symbol,
-                decimals
-            FROM 
-                bigquery-public-data.crypto_ethereum.tokens
-        )
-        SELECT 
-            t.token_address,
-            m.name,
-            m.symbol,
-            COUNT(*) as transaction_count,
-            SUM(CASE WHEN t.from_address = '{wallet_id}' THEN CAST(t.value AS NUMERIC) ELSE 0 END) as sent,
-            SUM(CASE WHEN t.to_address = '{wallet_id}' THEN CAST(t.value AS NUMERIC) ELSE 0 END) as received
-        FROM 
-            bigquery-public-data.crypto_ethereum.token_transfers t
-        LEFT JOIN 
-            token_metadata m
-        ON 
-            t.token_address = m.address
-        WHERE 
-            (
-                t.from_address = '{wallet_id}' 
-                OR t.to_address = '{wallet_id}'
-            )
-            AND t.block_timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {days} DAY)
-        GROUP BY 
-            t.token_address, m.name, m.symbol, m.decimals
-        ORDER BY 
-            (sent + received) DESC
-        LIMIT {limit};
+    WITH token_metadata AS (
+    SELECT 
+        LOWER(address) AS address,
+        name,
+        symbol,
+        CAST(decimals AS INT64) AS decimals
+    FROM 
+        `bigquery-public-data.crypto_ethereum.tokens`
+    ),
+
+    filtered_transfers AS (
+        SELECT
+            token_address,
+            LOWER(from_address) AS from_address,
+            LOWER(to_address) AS to_address,
+            CAST(value AS FLOAT64) AS raw_value,
+            block_timestamp
+        FROM
+            `bigquery-public-data.crypto_ethereum.token_transfers`
+        WHERE
+            (LOWER(from_address) = '{wallet_id}' OR LOWER(to_address) = '{wallet_id}')
+            AND block_timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {days} DAY)
+    )
+
+    SELECT 
+        ft.token_address,
+        tm.name,
+        tm.symbol,
+        tm.decimals,
+        COUNT(*) AS transaction_count,
+        SUM(
+            CASE 
+                WHEN ft.from_address = '{wallet_id}' THEN ft.raw_value / POW(10, tm.decimals)
+                ELSE 0 
+            END
+        ) AS sent,
+        SUM(
+            CASE 
+                WHEN ft.to_address = '{wallet_id}' THEN ft.raw_value / POW(10, tm.decimals)
+                ELSE 0 
+            END
+        ) AS received
+    FROM 
+        filtered_transfers ft
+    LEFT JOIN 
+        token_metadata tm
+    ON 
+        ft.token_address = tm.address
+    GROUP BY 
+        ft.token_address, tm.name, tm.symbol, tm.decimals
+    HAVING
+        (sent + received) > 0.001
+    ORDER BY 
+        (sent + received) DESC
+    LIMIT {limit};
     """
 
     WALLET_INFO = """
