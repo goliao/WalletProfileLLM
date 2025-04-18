@@ -93,7 +93,7 @@ To connect your MCP server to Claude Desktop:
 - **Invalid Wallet Address**: Ensure that wallet addresses being analyzed are valid. The server validates addresses before processing.
 
 ## License
-[Add your license information here]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 # Web3 Wallet Profiler LLM Chatbot Specification
 
@@ -466,6 +466,3 @@ The Web3 Wallet Profiler LLM Chatbot, powered by OpenAI’s GPT-4 and ergut’s 
 - [OpenAI API Documentation for Developers](https://platform.openai.com/docs/api-reference)
 - [GDPR Compliance Information and Guidelines](https://gdpr.eu/)
 - [Google BigQuery Pricing Details](https://cloud.google.com/bigquery/pricing)
-
-
-
