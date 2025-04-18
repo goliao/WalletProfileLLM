@@ -1,3 +1,100 @@
+# Web3 Wallet Profiler MCP Server
+
+## Description
+This project provides an MCP (Model Context Protocol) server that allows Claude models to analyze and profile Ethereum and Solana wallet transactions. The server lets Claude analyze transaction history, token distributions, trading patterns, and other on-chain activities to help users better understand wallet behaviors and profiles.
+
+## Requirements
+- Python 3.x (as specified in `.python-version` file)
+- [uv](https://github.com/astral-sh/uv) - A fast Python package manager
+- Google Cloud account with BigQuery access
+- Claude Desktop or Claude Code
+
+## Setup
+
+### 1. Clone the repository
+```bash
+git clone git@github.com:goliao/WalletProfileLLM.git
+cd your-repository
+```
+
+### 2. Set up Python environment with uv
+uv will automatically detect the Python version from the `.python-version` file and create a virtual environment with the correct dependencies based on the `uv.lock` file.
+
+```bash
+# Set up the project environment and install dependencies
+uv sync
+```
+
+### 3. Google Cloud Authentication
+This project uses Google Cloud's Application Default Credentials (ADC) for authentication to access blockchain data stored in BigQuery. Set up your credentials with:
+
+```bash
+# Authenticate with Google Cloud
+gcloud auth application-default login
+```
+
+This will open a browser window to authenticate with your Google account and set up your credentials locally.
+
+### 4. Configure environment variables
+Create a `.env.local` file in the root directory to store configuration that shouldn't be committed to the repository:
+
+```bash
+# Create a .env.local file
+cp .env.example .env.local
+```
+
+Edit the `.env.local` file with your specific configuration:
+
+```
+PROJECT_ID=your-project-id
+```
+
+> **Note**: The `.env.local` file contains sensitive information and is included in `.gitignore` to prevent it from being committed to the repository.
+
+## Connecting to Claude Desktop
+
+To connect your MCP server to Claude Desktop:
+
+1. Open your Claude Desktop configuration file:
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+2. Create or edit the file to include your MCP server:
+
+```json
+{
+    "mcpServers": {
+      ...
+        "tokens": {
+            "command": "uv",
+            "args": [
+                "--directory",
+                "~/WalletProfileLLM",
+                "run",
+                "mcp_server.py"
+            ]
+        }
+    }
+}
+```
+
+3. Restart Claude Desktop
+
+## Troubleshooting
+
+- **Authentication Issues**: If you encounter authentication problems, ensure you've run `gcloud auth application-default login` and have the appropriate permissions for your BigQuery resources.
+  
+- **Connection Issues**: Check that the MCP server is running and properly configured in Claude Desktop or Claude Code.
+
+- **Port Conflicts**: If the server fails to start due to a port conflict, modify the `MCP_PORT` in your `.env.local` file.
+
+- **RPC Rate Limiting**: If you experience issues with wallet analysis, you may be hitting rate limits on the Ethereum or Solana RPC endpoints. Consider using a paid RPC provider or implementing rate limiting in your server.
+
+- **Invalid Wallet Address**: Ensure that wallet addresses being analyzed are valid. The server validates addresses before processing.
+
+## License
+[Add your license information here]
+
 # Web3 Wallet Profiler LLM Chatbot Specification
 
 ## Key Points
@@ -24,26 +121,6 @@ The Web3 Wallet Profiler LLM Chatbot is a specialized tool crafted to assist com
 
 ## Introduction
 This specification details the architecture, functionality, and implementation of the Web3 Wallet Profiler LLM Chatbot, tailored for compliance use. By combining OpenAI’s natural language processing capabilities with ergut’s mcp-bigquery-server, the chatbot can dynamically understand the structure of blockchain data and answer complex questions about Ethereum wallet activities. The backend is built with Python and FastAPI, ensuring robust API handling, while the frontend provides an intuitive chat experience.
-
-## Setup with Claude Desktop
-go to the following location: ~/Library/Application Support/Claude/claude_desktop_config.json
-and add the following definition to your mcp servers: 
-```
-{
-    "mcpServers": {
-      ...
-        "tokens": {
-            "command": "uv",
-            "args": [
-                "--directory",
-                "~/WalletProfileLLM",
-                "run",
-                "mcp_server.py"
-            ]
-        }
-    }
-}
-```
 
 ## Architecture
 
@@ -389,3 +466,6 @@ The Web3 Wallet Profiler LLM Chatbot, powered by OpenAI’s GPT-4 and ergut’s 
 - [OpenAI API Documentation for Developers](https://platform.openai.com/docs/api-reference)
 - [GDPR Compliance Information and Guidelines](https://gdpr.eu/)
 - [Google BigQuery Pricing Details](https://cloud.google.com/bigquery/pricing)
+
+
+

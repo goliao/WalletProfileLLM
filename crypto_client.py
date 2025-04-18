@@ -7,10 +7,28 @@ class CryptoClient:
     # Class constants for default values
     DEFAULT_DAYS_TO_LOOK_BACK = 100
     DEFAULT_TRANSACTION_LIMIT = 100
+    MAX_DAYS_TO_LOOK_BACK = 500
+    MAX_TRANSACTION_LIMIT = 500
 
     def __init__(self):
         self.days_to_look_back = self.DEFAULT_DAYS_TO_LOOK_BACK
         self.transaction_limit = self.DEFAULT_TRANSACTION_LIMIT
+
+    def _validate_limits(self, days: int, limit: int) -> tuple[int, int]:
+        """
+        Validate and cap the days and limit parameters to their maximum values.
+        
+        Args:
+            days (int): Number of days to look back
+            limit (int): Maximum number of transactions
+            
+        Returns:
+            tuple[int, int]: Validated days and limit values
+        """
+        return (
+            min(days, self.MAX_DAYS_TO_LOOK_BACK),
+            min(limit, self.MAX_TRANSACTION_LIMIT)
+        )
 
     async def _execute_safe_query(self, query: str) -> Optional[List[Dict[str, Any]]]:
         """
@@ -46,6 +64,7 @@ class CryptoClient:
         Raises:
             BigQueryQueryTooLarge: If the query would process too much data
         """
+        days, limit = self._validate_limits(days, limit)
         query = CryptoQueries.format_query(CryptoQueries.USDC_TRANSACTIONS,
             token_address=CryptoQueries.USDC_TOKEN_ADDRESS,
             wallet_id=wallet_id,
@@ -71,6 +90,7 @@ class CryptoClient:
         Raises:
             BigQueryQueryTooLarge: If the query would process too much data
         """
+        days, limit = self._validate_limits(days, limit)
         query = CryptoQueries.format_query(CryptoQueries.ETH_TRANSFERS,
             wallet_id=wallet_id,
             days=days,
@@ -95,6 +115,7 @@ class CryptoClient:
         Raises:
             BigQueryQueryTooLarge: If the query would process too much data
         """
+        days, limit = self._validate_limits(days, limit)
         query = CryptoQueries.format_query(CryptoQueries.TOP_TOKENS,
             wallet_id=wallet_id,
             days=days,
@@ -118,6 +139,7 @@ class CryptoClient:
         Raises:
             BigQueryQueryTooLarge: If the query would process too much data
         """
+        days, limit = self._validate_limits(days, limit)
         query = CryptoQueries.format_query(CryptoQueries.SOL_TRANSFERS,
             wallet_id=wallet_id,
             days=days,
@@ -138,9 +160,9 @@ class CryptoClient:
             Dict[str, Any]: Dictionary containing wallet information including:
                 - first_seen: First transaction timestamp
                 - total_transactions: Total number of transactions
-                - total_volume: Total transaction volume in ETH
                 - is_contract: Whether the address is a contract
         """
+        days, limit = self._validate_limits(days, limit)
         query = CryptoQueries.format_query(CryptoQueries.WALLET_INFO,
             wallet_id=wallet_id,
             days=days,

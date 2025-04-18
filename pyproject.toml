@@ -1,0 +1,11 @@
+[project]
+name = "walletprofilellm"
+version = "0.1.0"
+description = "Web3 Wallet Profiler MCP Server"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=2.2.0",
+    "google-cloud-bigquery>=3.31.0",
+    "python-dotenv>=1.1.0",
+]

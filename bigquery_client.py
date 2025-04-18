@@ -11,7 +11,7 @@ class BigQueryClient:
         load_dotenv()
         self.project_id = os.getenv("PROJECT_ID")
         self.client = bigquery.Client(project=self.project_id)
-        self.max_query_size_gb = 40  # Maximum allowed query size in GB
+        self.max_query_size_gb = 300  # Maximum allowed query size in GB
     
     async def execute_query(self, query: str) -> list:
         """
@@ -55,7 +55,7 @@ class BigQueryClient:
         """
         job_config = bigquery.QueryJobConfig(dry_run=True, use_query_cache=False)
         job = self.client.query(query, job_config=job_config)
-        return job.total_bytes_processed / (1024 ** 3)  # GB
+        return job.total_bytes_processed / 1_000_000_000  # GB
 
 # Create a singleton instance
 bigquery_client = BigQueryClient() 
